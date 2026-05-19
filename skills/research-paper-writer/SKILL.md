@@ -72,11 +72,13 @@ Only after all of the following are true may the main worker draft or modify man
 Load `references/paper_prompt_reference.md` for the required writing stages and formatting rules. Load `references/project_report_patterns.md` only when the current workspace is GNSSDataS or when those examples help interpret a similar experiment-paper workflow.
 
 Load these role references before dispatching review agents:
+- `references/agent_prompt_templates.md` before creating Stage 0 agents or any later review/revision agents.
 - `references/journal_editor_review.md`
 - `references/domain_reviewer_review.md`
 - `references/copy_editor_review.md` when copy editing is requested or useful.
 - `references/review_round_template.md` when recording review rounds.
 - `references/evidence_manifest_template.md` before the first independent review round.
+- `references/venue_brief_template.md` when a target venue, format guide, template, Word/PDF instruction file, or venue website is involved, and when preparing copy-edit/export checks.
 - `references/adversarial_validation_scenarios.md` when testing or refining the skill itself.
 
 ## Session Memory To Paper Draft
@@ -141,7 +143,7 @@ Always use real independent agents for this skill. The main thread remains the c
 
 - `copy editor / formatting checker`: inspect language, consistency, figure/table numbering, cross-references, citation style, and LaTeX/Word/PDF layout.
 
-Before Stage 2, create a `venue brief`. Resolve it from, in order:
+Before Stage 2, create a `venue brief` using `references/venue_brief_template.md`. Resolve it from, in order:
 - explicit user instructions;
 - user-provided conversation notes;
 - user-provided Word/PDF/template files that specify formatting;
@@ -203,6 +205,16 @@ Do not declare the paper complete until:
 
 Before the first independent review round, create an `evidence manifest` using `references/evidence_manifest_template.md`. Reviewer acceptance is invalid if the manifest is missing or incomplete.
 
+Run the audit helper before reviewer acceptance whenever local artifact paths are available:
+
+`python skills\research-paper-writer\scripts\audit_evidence_manifest.py --manifest <evidence_manifest.md> --root <artifact-root>`
+
+If a BibTeX file exists, include it:
+
+`python skills\research-paper-writer\scripts\audit_evidence_manifest.py --manifest <evidence_manifest.md> --root <artifact-root> --bib <references.bib>`
+
+Treat any audit error as a blocking evidence issue. Warnings require explicit acknowledgement or resolution before finalization.
+
 ## Evidence Integrity Rules
 
 The manuscript must be auditable. Do not fabricate, embellish, or silently smooth over missing evidence.
@@ -221,7 +233,7 @@ Do not begin this workflow as a single coordinator. The coordinator may gather c
 
 ### 0. Team Formation Gate
 
-Create or re-brief the required agents and obtain their Stage 0 outputs before continuing. For a pure review task, the main worker prepares the manuscript/evidence packet, the editor and reviewer independently review it, and the coordinator only synthesizes their returned judgments.
+Create or re-brief the required agents using `references/agent_prompt_templates.md` and obtain their Stage 0 outputs before continuing. For a pure review task, the main worker prepares the manuscript/evidence packet, the editor and reviewer independently review it, and the coordinator only synthesizes their returned judgments.
 
 ### 1. Evidence Ledger
 
@@ -282,6 +294,8 @@ Before polishing or export, build a compact audit map:
 
 Resolve every unsupported item before treating the draft as complete.
 
+When the manifest is written, run `scripts/audit_evidence_manifest.py` and attach its result to the review packet. Do not treat the script as a substitute for expert review; use it as a hard preflight for missing fields, missing local artifacts, unresolved statuses, and missing BibTeX keys.
+
 ### 7. Post-Draft Review Rounds
 
 Run the role loop described above. Preserve a concise paper-formation log with:
@@ -308,6 +322,8 @@ When the task is only "论文初稿版", at minimum produce a complete Markdown 
 
 Before claiming completion:
 - confirm the required `main worker`, `journal editor`, and `domain reviewer` agents were created before drafting or revision, and their Stage 0 outputs are recorded;
+- confirm the venue brief exists or that a generic fallback was explicitly chosen;
+- confirm the evidence manifest audit was run, or explain why no local artifact-root audit was possible;
 - verify output files exist and have nonzero size;
 - inspect LaTeX or PDF generation logs when applicable;
 - check formulas are numbered and referenced consistently;

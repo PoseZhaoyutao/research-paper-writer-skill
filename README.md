@@ -13,6 +13,9 @@ The skill is designed for serious paper writing rather than lightweight report g
   - `journal editor`
   - `domain reviewer`
   - optional `copy editor / formatting checker`
+- Provides reusable agent prompt templates for Stage 0, review, revision, and formatting roles.
+- Provides a venue brief template for journal/conference/thesis formatting requirements.
+- Provides an evidence manifest audit script for missing fields, missing local artifacts, unresolved statuses, and BibTeX key checks.
 - Starts from review when a complete manuscript already exists.
 - Checks figures, tables, formulas, conclusions, and references against real evidence.
 - Supports Markdown, LaTeX, Word, and PDF-oriented paper workflows.
@@ -40,7 +43,10 @@ skills/
     SKILL.md
     agents/openai.yaml
     references/
+      agent_prompt_templates.md
+      venue_brief_template.md
     scripts/collect_paper_context.py
+    scripts/audit_evidence_manifest.py
   research-report-writer/
     SKILL.md
     agents/openai.yaml
@@ -113,6 +119,22 @@ set PYTHONUTF8=1&& python %USERPROFILE%\.codex\skills\.system\skill-creator\scri
 
 ```cmd
 python -m py_compile skills\research-paper-writer\scripts\collect_paper_context.py
+```
+
+```cmd
+python -m py_compile skills\research-paper-writer\scripts\audit_evidence_manifest.py
+```
+
+Run an evidence manifest audit with:
+
+```cmd
+python skills\research-paper-writer\scripts\audit_evidence_manifest.py --manifest evidence_manifest.md --root .
+```
+
+If a BibTeX file exists:
+
+```cmd
+python skills\research-paper-writer\scripts\audit_evidence_manifest.py --manifest evidence_manifest.md --root . --bib references.bib
 ```
 
 ## License

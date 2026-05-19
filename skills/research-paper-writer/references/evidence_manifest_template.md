@@ -9,6 +9,13 @@ Use this manifest before independent review. It is mandatory for reviewer accept
 - target venue:
 - venue brief:
 
+## Audit Command
+
+- artifact root:
+- command:
+- audit result:
+- audit report path:
+
 ## Runs
 
 For each reported result:
