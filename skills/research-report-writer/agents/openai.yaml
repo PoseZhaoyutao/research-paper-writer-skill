@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Report Writer (Legacy)"
+  short_description: "Legacy alias for paper writer"
+  default_prompt: "Use $research-paper-writer for manuscript drafting and reviewer-style revision with the mandatory real multi-agent startup gate; use this legacy alias only for backwards compatibility."

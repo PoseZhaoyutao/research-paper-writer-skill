@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Paper Writer"
+  short_description: "Write papers with mandatory multi-agent gates"
+  default_prompt: "Use $research-paper-writer with the relevant session memory, experiment logs, metrics, artifacts, and prior drafts. First create the required main worker, journal editor, and domain reviewer agents; collect their Stage 0 outputs before drafting or revising manuscript content."
